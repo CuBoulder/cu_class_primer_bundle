@@ -1,0 +1,6 @@
+name = Class Primer
+description = Populate classes from csv files.
+core = 7.x
+package = CU-Classes
+
+dependencies[] = cu_class
