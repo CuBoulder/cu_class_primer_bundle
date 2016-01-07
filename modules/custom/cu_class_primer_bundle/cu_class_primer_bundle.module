@@ -15,30 +15,45 @@ function cu_class_primer_bundle_menu() {
     'access arguments' => array('administer modules'),
   );
 
-  $items['primer/courses/%subject'] = array(
-      'title' => 'Class Primer - Master XML',
-      'description' =>  'Import classes.',
-      'page callback' => 'cu_class_primer_master',
-      'page_arguments' => array(2),
-      'access arguments' => array('administer modules'),
-      'type' => MENU_CALLBACK,
+  $items['primer/courses'] = array(
+    'title' => 'Class Primer - Master XML',
+    'description' =>  'Import classes.',
+    'page callback' => 'cu_class_primer_master',
+    'access callback' => 'cu_class_primer_access',
+    'type' => MENU_CALLBACK,
   );
 
   $items['primer/class/%id'] = array(
-      'title' => 'Class Primer - Detail XML',
-      'description' =>  'Import classes.',
-      'page callback' => 'cu_class_primer_detail',
-      'page_arguments' => array(2),
-      'access arguments' => array('administer modules'),
-      'type' => MENU_CALLBACK,
+    'title' => 'Class Primer - Detail XML',
+    'description' =>  'Import classes.',
+    'page callback' => 'cu_class_primer_detail',
+    'page_arguments' => array(2),
+    'access callback' => 'cu_class_primer_access',
+    'type' => MENU_CALLBACK,
   );
 
   return $items;
 }
 
-function cu_class_primer_master($subject) {
+/**
+ * Access callback for ??
+ */
+function cu_class_primer_access() {
+  // switch to a custom permission?
+  return TRUE;
+}
+
+
+function cu_class_primer_master($arg2, $arg3, $arg4) {
   drupal_add_http_header('Content-Type', 'text/xml');
+  //$inst = 'CUBLD';
+  //$term = '2164';
   //$subject = 'HIST';
+
+  $inst = $arg2;
+  $term = $arg3;
+  $subject = $arg4;
+
   $output = '<?xml version="1.0" encoding="UTF-8"?>
   <SSR_GET_CLASSES_RESP xmlns="http://xmlns.oracle.com/Enterprise/HCM/services">
     <SEARCH_RESULT>
