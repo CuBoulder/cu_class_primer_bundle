@@ -253,33 +253,21 @@ function cu_classes_primer_detail($arg2, $arg3, $arg4, $arg5) {
   $output = '<?xml version="1.0" encoding="UTF-8"?>
 <SSR_GET_CLASSES_RESP xmlns:ser="http://xmlns.oracle.com/Enterprise/HCM/services">
     <SEARCH_RESULT>
-    <SUBJECTS>';
-
-  $results = db_query('SELECT * FROM {class_search} WHERE CRSE_CD = :course_id', array(':course_id' => $course_id));
-
-  foreach ($results as $class) {
-
-    $count++;
-
-    $title = check_plain($class->CRSE_TTL_LD);
-    $output .= '
-    <SUBJECT index="' . $count . '">
-      <CRSE_ID>' . $course_id  . '</CRSE_ID>
-      <CRSE_ID_LOVDescr>' . $title  . '</CRSE_ID_LOVDescr>
-      <SUBJECT>' . $subject  . '</SUBJECT>
-      <SUBJECT_LOVDescr>' . $class->SBJCT_LD  . '</SUBJECT_LOVDescr>
-      <CATALOG_NBR>' . $class->CATALOG_NBR  . '</CATALOG_NBR>
-      <INSTITUTION>' . $inst  . '</INSTITUTION>
-      <INSTITUTION_LOVDescr>CU Boulder</INSTITUTION_LOVDescr>
-      <ACAD_CAREER>UGRD</ACAD_CAREER>
-      <ACAD_CAREER_LOVDescr>Undergraduate</ACAD_CAREER_LOVDescr>
-      <COURSE_TITLE_LONG>' . $title  . '</COURSE_TITLE_LONG>
-      <CRSE_OFFER_NBR>1</CRSE_OFFER_NBR>
-
-    </SUBJECT>';
-  }
-
-  $output .= '</SUBJECTS>
+    <SUBJECTS>
+      <SUBJECT index="1">
+        <CRSE_ID>123</CRSE_ID>
+        <CRSE_ID_LOVDescr>test</CRSE_ID_LOVDescr>
+        <SUBJECT>test</SUBJECT>
+        <SUBJECT_LOVDescr>test</SUBJECT_LOVDescr>
+        <CATALOG_NBR>123</CATALOG_NBR>
+        <INSTITUTION>CUBLD</INSTITUTION>
+        <INSTITUTION_LOVDescr>CU Boulder</INSTITUTION_LOVDescr>
+        <ACAD_CAREER>UGRD</ACAD_CAREER>
+        <ACAD_CAREER_LOVDescr>Undergraduate</ACAD_CAREER_LOVDescr>
+        <COURSE_TITLE_LONG>test</COURSE_TITLE_LONG>
+        <CRSE_OFFER_NBR>1</CRSE_OFFER_NBR>
+      </SUBJECT>
+    </SUBJECTS>
 </SEARCH_RESULT>
 </SSR_GET_CLASSES_RESP>';
 
