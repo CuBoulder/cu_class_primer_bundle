@@ -100,14 +100,14 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
   $count = 0;
 
   $output = '<?xml version="1.0" encoding="UTF-8"?>
-<ser:SSR_GET_CLASSES_RESP xmlns:ser="http://xmlns.oracle.com/Enterprise/HCM/services">
-    <ser:SEARCH_RESULT>
-    <ser:ERROR_WARN_TEXT/>
-    <ser:SSR_COURSE_COUNT>1</ser:SSR_COURSE_COUNT>
-    <ser:SSR_ERR_LMT_EXCEED/>
-    <ser:SSR_WRN_LMT_EXCEED/>
-    <ser:SSR_CLASS_COUNT>1</ser:SSR_CLASS_COUNT>
-    <ser:SUBJECTS>';
+<SSR_GET_CLASSES_RESP xmlns:ser="http://xmlns.oracle.com/Enterprise/HCM/services">
+    <SEARCH_RESULT>
+    <ERROR_WARN_TEXT/>
+    <SSR_COURSE_COUNT>1</SSR_COURSE_COUNT>
+    <SSR_ERR_LMT_EXCEED/>
+    <SSR_WRN_LMT_EXCEED/>
+    <SSR_CLASS_COUNT>1</SSR_CLASS_COUNT>
+    <SUBJECTS>';
 
   $results = db_query('SELECT * FROM {class_search} WHERE CRSE_CD = :course_id', array(':course_id' => $course_id));
 
@@ -118,111 +118,111 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
 //dsm($course);
     $title = check_plain($class->CRSE_TTL_LD);
     $output .= '
-    <ser:SUBJECT index="' . $count . '">
-      <ser:CRSE_ID>' . $course_id  . '</ser:CRSE_ID>
-      <ser:CRSE_ID_LOVDescr>' . $title  . '</ser:CRSE_ID_LOVDescr>
-      <ser:SUBJECT>' . $subject  . '</ser:SUBJECT>
-      <ser:SUBJECT_LOVDescr>' . $class->SBJCT_LD  . '</ser:SUBJECT_LOVDescr>
-      <ser:CATALOG_NBR>' . $class->CATALOG_NBR  . '</ser:CATALOG_NBR>
-      <ser:INSTITUTION>' . $inst  . '</ser:INSTITUTION>
-      <ser:INSTITUTION_LOVDescr>CU Boulder</ser:INSTITUTION_LOVDescr>
-      <ser:ACAD_CAREER>UGRD</ser:ACAD_CAREER>
-      <ser:ACAD_CAREER_LOVDescr>Undergraduate</ser:ACAD_CAREER_LOVDescr>
-      <ser:COURSE_TITLE_LONG>' . $title  . '</ser:COURSE_TITLE_LONG>
-      <ser:CRSE_OFFER_NBR>1</ser:CRSE_OFFER_NBR>
-      <ser:CLASSES_SUMMARY>
-        <ser:CLASS_SUMMARY index="1">
-          <ser:CRSE_ID>' . $course_id  . '</ser:CRSE_ID>
-          <ser:CRSE_ID_LOVDescr>' . $title  . '</ser:CRSE_ID_LOVDescr>
-          <ser:SUBJECT>' . $subject  . '</ser:SUBJECT>
-          <ser:SUBJECT_LOVDescr>' . $class->SBJCT_LD . '</ser:SUBJECT_LOVDescr>
-          <ser:CATALOG_NBR>' . $class->CATALOG_NBR . '</ser:CATALOG_NBR>
-          <ser:CRSE_OFFER_NBR>1</ser:CRSE_OFFER_NBR>
-          <ser:STRM>' . $term  . '</ser:STRM>
-          <ser:STRM_LOVDescr>Spring 2016</ser:STRM_LOVDescr>
-          <ser:SESSION_CODE>BL3</ser:SESSION_CODE>
-          <ser:SESSION_CODE_LOVDescr>CE Online TermBased Full Sess</ser:SESSION_CODE_LOVDescr>
-          <ser:CLASS_SECTION>581</ser:CLASS_SECTION>
-          <ser:CLASS_NBR>36370</ser:CLASS_NBR>
-          <ser:SCHEDULE_PRINT>Y</ser:SCHEDULE_PRINT>
-          <ser:SCHEDULE_PRINT_LOVDescr>Yes</ser:SCHEDULE_PRINT_LOVDescr>
-          <ser:COMBINED_SECTION/>
-          <ser:COMBINED_SECTION_LOVDescr/>
-          <ser:STATUS>O</ser:STATUS>
-          <ser:CLASS_TOPIC>0</ser:CLASS_TOPIC>
-          <ser:SSR_CLASSNAME_LONG/>
-          <ser:STATUS>O</ser:STATUS>
-          <ser:STATUS_LOVDescr>Open</ser:STATUS_LOVDescr>
-          <ser:SSR_COMPONENT>LEC</ser:SSR_COMPONENT>
-          <ser:SSR_COMPONENT_LOVDescr>Lecture</ser:SSR_COMPONENT_LOVDescr>
-          <ser:CAMPUS>CEPS</ser:CAMPUS>
-          <ser:CAMPUS_LOVDescr>Boulder Continuing Education</ser:CAMPUS_LOVDescr>
-          <ser:INSTITUTION>CUBLD</ser:INSTITUTION>
-          <ser:SSR_DESCRLONG>
+    <SUBJECT index="' . $count . '">
+      <CRSE_ID>' . $course_id  . '</CRSE_ID>
+      <CRSE_ID_LOVDescr>' . $title  . '</CRSE_ID_LOVDescr>
+      <SUBJECT>' . $subject  . '</SUBJECT>
+      <SUBJECT_LOVDescr>' . $class->SBJCT_LD  . '</SUBJECT_LOVDescr>
+      <CATALOG_NBR>' . $class->CATALOG_NBR  . '</CATALOG_NBR>
+      <INSTITUTION>' . $inst  . '</INSTITUTION>
+      <INSTITUTION_LOVDescr>CU Boulder</INSTITUTION_LOVDescr>
+      <ACAD_CAREER>UGRD</ACAD_CAREER>
+      <ACAD_CAREER_LOVDescr>Undergraduate</ACAD_CAREER_LOVDescr>
+      <COURSE_TITLE_LONG>' . $title  . '</COURSE_TITLE_LONG>
+      <CRSE_OFFER_NBR>1</CRSE_OFFER_NBR>
+      <CLASSES_SUMMARY>
+        <CLASS_SUMMARY index="1">
+          <CRSE_ID>' . $course_id  . '</CRSE_ID>
+          <CRSE_ID_LOVDescr>' . $title  . '</CRSE_ID_LOVDescr>
+          <SUBJECT>' . $subject  . '</SUBJECT>
+          <SUBJECT_LOVDescr>' . $class->SBJCT_LD . '</SUBJECT_LOVDescr>
+          <CATALOG_NBR>' . $class->CATALOG_NBR . '</CATALOG_NBR>
+          <CRSE_OFFER_NBR>1</CRSE_OFFER_NBR>
+          <STRM>' . $term  . '</STRM>
+          <STRM_LOVDescr>Spring 2016</STRM_LOVDescr>
+          <SESSION_CODE>BL3</SESSION_CODE>
+          <SESSION_CODE_LOVDescr>CE Online TermBased Full Sess</SESSION_CODE_LOVDescr>
+          <CLASS_SECTION>581</CLASS_SECTION>
+          <CLASS_NBR>36370</CLASS_NBR>
+          <SCHEDULE_PRINT>Y</SCHEDULE_PRINT>
+          <SCHEDULE_PRINT_LOVDescr>Yes</SCHEDULE_PRINT_LOVDescr>
+          <COMBINED_SECTION/>
+          <COMBINED_SECTION_LOVDescr/>
+          <STATUS>O</STATUS>
+          <CLASS_TOPIC>0</CLASS_TOPIC>
+          <SSR_CLASSNAME_LONG/>
+          <STATUS>O</STATUS>
+          <STATUS_LOVDescr>Open</STATUS_LOVDescr>
+          <SSR_COMPONENT>LEC</SSR_COMPONENT>
+          <SSR_COMPONENT_LOVDescr>Lecture</SSR_COMPONENT_LOVDescr>
+          <CAMPUS>CEPS</CAMPUS>
+          <CAMPUS_LOVDescr>Boulder Continuing Education</CAMPUS_LOVDescr>
+          <INSTITUTION>CUBLD</INSTITUTION>
+          <SSR_DESCRLONG>
             Detailed consideration of human biology, the place of humans in the animal kingdom, primate ecology, and fossil evidence for human evolution. Credit not granted for this course and ANTH 2050. Required for ANTH majors. Approved for GT-SC1. Meets MAPS requirement for natural science: non-lab. Approved for arts and sciences core curriculum: natural science.
-          </ser:SSR_DESCRLONG>
-          <ser:INSTRUCTION_MODE>OL</ser:INSTRUCTION_MODE>
-          <ser:INSTRUCTION_MODE_LOVDescr>Online</ser:INSTRUCTION_MODE_LOVDescr>
-          <ser:ENRL_CAP>35</ser:ENRL_CAP>
-          <ser:ENRL_TOT>19</ser:ENRL_TOT>
-          <ser:WAIT_CAP>999</ser:WAIT_CAP>
-          <ser:WAIT_TOT>0</ser:WAIT_TOT>
-          <ser:ENRL_STAT>O</ser:ENRL_STAT>
-          <ser:CLASS_NOTES>
-            <ser:CLASS_NOTE></ser:CLASS_NOTE>
-          </ser:CLASS_NOTES>
-          <ser:UNITS_MAX>3 3 3 3 3 3 3 3</ser:UNITS_MAX>
-          <ser:UNITS_MIN>3 3 3 3 3 3 3 3</ser:UNITS_MIN>
-          <ser:CRSE_ATTR>BCRQ BCRQ BCRQ BCRQ BCRQ BCRQ GT GT</ser:CRSE_ATTR>
-          <ser:CRSE_ATTR_VALUE>AM AM AX AX AY AY GT-SC1 GT-SC1</ser:CRSE_ATTR_VALUE>
-          <ser:UNITS_ACAD_PROG>3 3 3 3 3 3 3 3</ser:UNITS_ACAD_PROG>
-          <ser:RQRMNT_GROUP></ser:RQRMNT_GROUP>
-          <ser:RQRMNT_GROUP_DESCR></ser:RQRMNT_GROUP_DESCR>
-          <ser:CRS_TOPIC_ID>0</ser:CRS_TOPIC_ID>
-          <ser:CRS_TOPIC_DESCR/>
-          <ser:CLASSES_MEETING_PATTERNS>
-            <ser:CLASS_MEETING_PATTERN>
-              <ser:MEETING_TIME_START>.</ser:MEETING_TIME_START>
-              <ser:MEETING_TIME_END>.</ser:MEETING_TIME_END>
-              <ser:MON>N</ser:MON>
-              <ser:TUES>N</ser:TUES>
-              <ser:WED>N</ser:WED>
-              <ser:THURS>N</ser:THURS>
-              <ser:FRI>N</ser:FRI>
-              <ser:SAT>N</ser:SAT>
-              <ser:SUN>N</ser:SUN>
-              <ser:START_DT>2016-01-19</ser:START_DT>
-              <ser:END_DT>2016-04-29</ser:END_DT>
-              <ser:CRS_TOPIC_ID>0</ser:CRS_TOPIC_ID>
-              <ser:CRS_TOPIC_ID_LOVDescr/>
-              <ser:SCC_LATITUDE>0</ser:SCC_LATITUDE>
-              <ser:SCC_LONGITUDE>0</ser:SCC_LONGITUDE>
-              <ser:SSR_MTG_SCHED_LONG>TBA</ser:SSR_MTG_SCHED_LONG>
-              <ser:SSR_MTG_LOC_LONG>Continuing Ed Online Class</ser:SSR_MTG_LOC_LONG>
-              <ser:SSR_INSTR_LONG>Jonathan O Brien</ser:SSR_INSTR_LONG>
-              <ser:SSR_MTG_DT_LONG>2016-01-19 - 2016-04-29</ser:SSR_MTG_DT_LONG>
-              <ser:SSR_TOPIC_LONG>TBA</ser:SSR_TOPIC_LONG>
-              <ser:CLASS_INSTRUCTORS>
-                <ser:CLASS_INSTRUCTOR>
-                  <ser:EMPLID>810288959</ser:EMPLID>
-                  <ser:INSTR_ROLE>PI</ser:INSTR_ROLE>
-                  <ser:INSTR_ROLE_LOVDescr>Primary Instructor</ser:INSTR_ROLE_LOVDescr>
-                  <ser:NAME_DISPLAY>Jonathan O Brien</ser:NAME_DISPLAY>
-                  <ser:LAST_NAME>O Brien</ser:LAST_NAME>
-                  <ser:FIRST_NAME>Jonathan</ser:FIRST_NAME>
-                  <ser:ENCRYPTED_EMPLID>S80Iqv7Cd2HvU4X6XIMm0Q==</ser:ENCRYPTED_EMPLID>
-                </ser:CLASS_INSTRUCTOR>
-              </ser:CLASS_INSTRUCTORS>
-            </ser:CLASS_MEETING_PATTERN>
-          </ser:CLASSES_MEETING_PATTERNS>
-        </ser:CLASS_SUMMARY>
-      </ser:CLASSES_SUMMARY>
-    </ser:SUBJECT>';
+          </SSR_DESCRLONG>
+          <INSTRUCTION_MODE>OL</INSTRUCTION_MODE>
+          <INSTRUCTION_MODE_LOVDescr>Online</INSTRUCTION_MODE_LOVDescr>
+          <ENRL_CAP>35</ENRL_CAP>
+          <ENRL_TOT>19</ENRL_TOT>
+          <WAIT_CAP>999</WAIT_CAP>
+          <WAIT_TOT>0</WAIT_TOT>
+          <ENRL_STAT>O</ENRL_STAT>
+          <CLASS_NOTES>
+            <CLASS_NOTE></CLASS_NOTE>
+          </CLASS_NOTES>
+          <UNITS_MAX>3 3 3 3 3 3 3 3</UNITS_MAX>
+          <UNITS_MIN>3 3 3 3 3 3 3 3</UNITS_MIN>
+          <CRSE_ATTR>BCRQ BCRQ BCRQ BCRQ BCRQ BCRQ GT GT</CRSE_ATTR>
+          <CRSE_ATTR_VALUE>AM AM AX AX AY AY GT-SC1 GT-SC1</CRSE_ATTR_VALUE>
+          <UNITS_ACAD_PROG>3 3 3 3 3 3 3 3</UNITS_ACAD_PROG>
+          <RQRMNT_GROUP></RQRMNT_GROUP>
+          <RQRMNT_GROUP_DESCR></RQRMNT_GROUP_DESCR>
+          <CRS_TOPIC_ID>0</CRS_TOPIC_ID>
+          <CRS_TOPIC_DESCR/>
+          <CLASSES_MEETING_PATTERNS>
+            <CLASS_MEETING_PATTERN>
+              <MEETING_TIME_START>.</MEETING_TIME_START>
+              <MEETING_TIME_END>.</MEETING_TIME_END>
+              <MON>N</MON>
+              <TUES>N</TUES>
+              <WED>N</WED>
+              <THURS>N</THURS>
+              <FRI>N</FRI>
+              <SAT>N</SAT>
+              <SUN>N</SUN>
+              <START_DT>2016-01-19</START_DT>
+              <END_DT>2016-04-29</END_DT>
+              <CRS_TOPIC_ID>0</CRS_TOPIC_ID>
+              <CRS_TOPIC_ID_LOVDescr/>
+              <SCC_LATITUDE>0</SCC_LATITUDE>
+              <SCC_LONGITUDE>0</SCC_LONGITUDE>
+              <SSR_MTG_SCHED_LONG>TBA</SSR_MTG_SCHED_LONG>
+              <SSR_MTG_LOC_LONG>Continuing Ed Online Class</SSR_MTG_LOC_LONG>
+              <SSR_INSTR_LONG>Jonathan O Brien</SSR_INSTR_LONG>
+              <SSR_MTG_DT_LONG>2016-01-19 - 2016-04-29</SSR_MTG_DT_LONG>
+              <SSR_TOPIC_LONG>TBA</SSR_TOPIC_LONG>
+              <CLASS_INSTRUCTORS>
+                <CLASS_INSTRUCTOR>
+                  <EMPLID>810288959</EMPLID>
+                  <INSTR_ROLE>PI</INSTR_ROLE>
+                  <INSTR_ROLE_LOVDescr>Primary Instructor</INSTR_ROLE_LOVDescr>
+                  <NAME_DISPLAY>Jonathan O Brien</NAME_DISPLAY>
+                  <LAST_NAME>O Brien</LAST_NAME>
+                  <FIRST_NAME>Jonathan</FIRST_NAME>
+                  <ENCRYPTED_EMPLID>S80Iqv7Cd2HvU4X6XIMm0Q==</ENCRYPTED_EMPLID>
+                </CLASS_INSTRUCTOR>
+              </CLASS_INSTRUCTORS>
+            </CLASS_MEETING_PATTERN>
+          </CLASSES_MEETING_PATTERNS>
+        </CLASS_SUMMARY>
+      </CLASSES_SUMMARY>
+    </SUBJECT>';
   }
 
-  $output .= '</ser:SUBJECTS>
-</ser:SEARCH_RESULT>
-</ser:SSR_GET_CLASSES_RESP>';
+  $output .= '</SUBJECTS>
+</SEARCH_RESULT>
+</SSR_GET_CLASSES_RESP>';
 
   print $output;
 }
