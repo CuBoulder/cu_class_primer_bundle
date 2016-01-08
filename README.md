@@ -13,7 +13,7 @@ tr '\t' ',' < ClassInstructorDetail.txt > ClassInstructorDetail.csv
 Once converted, add import each file into a database where the first row are the column titles then export all the tables as a single .sql export.  Currently this file must be manually imported using something like...
 
 ```
-`drush sql-connect` < sites/all/modules/custom/cu_class_primer_bundle/cu_classes_primer.sql
+drush sql-cli < sites/all/modules/custom/cu_class_primer_bundle/cu_classes_primer.sql
 ```
 
 This will not directly import the classes as entities, but simply mimics the XML of the API so that the site can be pointed at itself to prime the courses and classes before a term is available through the API.
