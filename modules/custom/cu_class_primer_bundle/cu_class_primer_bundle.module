@@ -146,8 +146,8 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
   foreach ($results as $class) {
     //dsm($class);
     $count++;
-//mimic XML structure from master response
-//dsm($course);
+    //mimic XML structure from detail response
+
     $title = check_plain($class->CRSE_TTL_LD);
     $output .= '<SUBJECT index="' . $count . '">
       <CRSE_ID>' . $course_id  . '</CRSE_ID>
@@ -174,7 +174,7 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
           <SESSION_CODE>BL3</SESSION_CODE>
           <SESSION_CODE_LOVDescr>CE Online TermBased Full Sess</SESSION_CODE_LOVDescr>
           <CLASS_SECTION>581</CLASS_SECTION>
-          <CLASS_NBR>36370</CLASS_NBR>
+          <CLASS_NBR>' . $class->CLASS_NUM . '</CLASS_NBR>
           <SCHEDULE_PRINT>Y</SCHEDULE_PRINT>
           <SCHEDULE_PRINT_LOVDescr>Yes</SCHEDULE_PRINT_LOVDescr>
           <COMBINED_SECTION/>
@@ -198,12 +198,12 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
           <ENRL_TOT>19</ENRL_TOT>
           <WAIT_CAP>999</WAIT_CAP>
           <WAIT_TOT>0</WAIT_TOT>
-          <ENRL_STAT>O</ENRL_STAT>
+          <ENRL_STAT>' . $class->ENRL_STAT . '</ENRL_STAT>
           <CLASS_NOTES>
             <CLASS_NOTE></CLASS_NOTE>
           </CLASS_NOTES>
-          <UNITS_MAX>3 3 3 3 3 3 3 3</UNITS_MAX>
-          <UNITS_MIN>3 3 3 3 3 3 3 3</UNITS_MIN>
+          <UNITS_MAX>' . $class->ENRL_STAT . '</UNITS_MAX>
+          <UNITS_MIN>' . $class->ENRL_STAT . '</UNITS_MIN>
           <CRSE_ATTR>BCRQ BCRQ BCRQ BCRQ BCRQ BCRQ GT GT</CRSE_ATTR>
           <CRSE_ATTR_VALUE>AM AM AX AX AY AY GT-SC1 GT-SC1</CRSE_ATTR_VALUE>
           <UNITS_ACAD_PROG>3 3 3 3 3 3 3 3</UNITS_ACAD_PROG>
