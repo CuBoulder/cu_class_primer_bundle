@@ -112,7 +112,7 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
   $results = db_query('SELECT * FROM {class_search} WHERE CRSE_CD = :course_id', array(':course_id' => $course_id));
 
   foreach ($results as $class) {
-    dsm($class);
+    //dsm($class);
     $count++;
 //mimic XML structure from master response
 //dsm($course);
