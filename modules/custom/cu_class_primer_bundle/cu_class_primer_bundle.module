@@ -31,6 +31,14 @@ function cu_class_primer_bundle_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  $items['primer/classes'] = array(
+    'title' => 'Class Primer - Detail XML',
+    'description' =>  'Import classes.',
+    'page callback' => 'cu_classes_primer_detail',
+    'access callback' => 'cu_class_primer_access',
+    'type' => MENU_CALLBACK,
+  );
+
   return $items;
 }
 
@@ -217,6 +225,57 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
           </CLASSES_MEETING_PATTERNS>
         </CLASS_SUMMARY>
       </CLASSES_SUMMARY>
+    </SUBJECT>';
+  }
+
+  $output .= '</SUBJECTS>
+</SEARCH_RESULT>
+</SSR_GET_CLASSES_RESP>';
+
+  print $output;
+}
+
+/**
+ * A detailed class listing
+ */
+function cu_classes_primer_detail($arg2, $arg3, $arg4, $arg5) {
+  drupal_add_http_header('Content-Type', 'text/xml');
+  //$inst = 'CUBLD';
+  //$term = '2164';
+  //$subject = 'HIST';
+
+  $inst = $arg2;
+  $term = $arg3;
+  $subject = $arg4;
+  $course_id = $arg5;
+  $count = 0;
+
+  $output = '<?xml version="1.0" encoding="UTF-8"?>
+<SSR_GET_CLASSES_RESP xmlns:ser="http://xmlns.oracle.com/Enterprise/HCM/services">
+    <SEARCH_RESULT>
+    <SUBJECTS>';
+
+  $results = db_query('SELECT * FROM {class_search} WHERE CRSE_CD = :course_id', array(':course_id' => $course_id));
+
+  foreach ($results as $class) {
+
+    $count++;
+
+    $title = check_plain($class->CRSE_TTL_LD);
+    $output .= '
+    <SUBJECT index="' . $count . '">
+      <CRSE_ID>' . $course_id  . '</CRSE_ID>
+      <CRSE_ID_LOVDescr>' . $title  . '</CRSE_ID_LOVDescr>
+      <SUBJECT>' . $subject  . '</SUBJECT>
+      <SUBJECT_LOVDescr>' . $class->SBJCT_LD  . '</SUBJECT_LOVDescr>
+      <CATALOG_NBR>' . $class->CATALOG_NBR  . '</CATALOG_NBR>
+      <INSTITUTION>' . $inst  . '</INSTITUTION>
+      <INSTITUTION_LOVDescr>CU Boulder</INSTITUTION_LOVDescr>
+      <ACAD_CAREER>UGRD</ACAD_CAREER>
+      <ACAD_CAREER_LOVDescr>Undergraduate</ACAD_CAREER_LOVDescr>
+      <COURSE_TITLE_LONG>' . $title  . '</COURSE_TITLE_LONG>
+      <CRSE_OFFER_NBR>1</CRSE_OFFER_NBR>
+
     </SUBJECT>';
   }
 
