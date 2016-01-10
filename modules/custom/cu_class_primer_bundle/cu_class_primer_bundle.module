@@ -170,6 +170,16 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
     $classes = db_query('SELECT * FROM {class_meeting} WHERE CRSE_ID = :course_id', array(':course_id' => $course_id));
     foreach ($classes as $class) {
       $class_count++;
+      //clean up times from csv imports
+      //1/1/1900 9:00:00.000000 AM 
+      $time_start = str_replace(":00.000000", "", $class->MEETING_TIME_START);
+      $time_start = str_replace("1/1/1900 ", "", $time_start);
+      dsm($time_start);
+      
+      $time_end = str_replace(":00.000000", "", $class->MEETING_TIME_START);
+      $time_end = str_replace("1/1/1900 ", "", $time_end);
+      dsm($time_end);
+      
       $output .= '      <CLASS_SUMMARY index="' . $class_count. '">
           <CRSE_ID>' . $course_id . '</CRSE_ID>
           <CRSE_ID_LOVDescr>' . $title . '</CRSE_ID_LOVDescr>
@@ -221,8 +231,8 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
           <CRS_TOPIC_DESCR/>
           <CLASSES_MEETING_PATTERNS>
             <CLASS_MEETING_PATTERN>
-              <MEETING_TIME_START>.</MEETING_TIME_START>
-              <MEETING_TIME_END>.</MEETING_TIME_END>
+              <MEETING_TIME_START>' . $time_start . '</MEETING_TIME_START>
+              <MEETING_TIME_END>' . $time_end . '</MEETING_TIME_END>
               <MON>N</MON>
               <TUES>N</TUES>
               <WED>N</WED>
@@ -230,15 +240,15 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
               <FRI>N</FRI>
               <SAT>N</SAT>
               <SUN>N</SUN>
-              <START_DT>2016-01-19</START_DT>
-              <END_DT>2016-04-29</END_DT>
+              <START_DT>' . $class->START_DT . '</START_DT>
+              <END_DT>' . $class->END_DT . '</END_DT>
               <CRS_TOPIC_ID>0</CRS_TOPIC_ID>
               <CRS_TOPIC_ID_LOVDescr/>
               <SCC_LATITUDE>0</SCC_LATITUDE>
               <SCC_LONGITUDE>0</SCC_LONGITUDE>
               <SSR_MTG_SCHED_LONG>TBA</SSR_MTG_SCHED_LONG>
-              <SSR_MTG_LOC_LONG>Continuing Ed Online Class</SSR_MTG_LOC_LONG>
-              <SSR_INSTR_LONG>Jonathan O Brien</SSR_INSTR_LONG>
+              <SSR_MTG_LOC_LONG>' . $class->FACILITY_ID_LOVDESCR . '</SSR_MTG_LOC_LONG>
+              <SSR_INSTR_LONG>' . $class->SSR_INSTR_LONG . '</SSR_INSTR_LONG>
               <SSR_MTG_DT_LONG>2016-01-19 - 2016-04-29</SSR_MTG_DT_LONG>
               <SSR_TOPIC_LONG>TBA</SSR_TOPIC_LONG>
               <CLASS_INSTRUCTORS>
@@ -246,10 +256,10 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
                   <EMPLID>810288959</EMPLID>
                   <INSTR_ROLE>PI</INSTR_ROLE>
                   <INSTR_ROLE_LOVDescr>Primary Instructor</INSTR_ROLE_LOVDescr>
-                  <NAME_DISPLAY>Jonathan O Brien</NAME_DISPLAY>
-                  <LAST_NAME>O Brien</LAST_NAME>
-                  <FIRST_NAME>Jonathan</FIRST_NAME>
-                  <ENCRYPTED_EMPLID>S80Iqv7Cd2HvU4X6XIMm0Q==</ENCRYPTED_EMPLID>
+                  <NAME_DISPLAY>' . $class->SSR_INSTR_LONG . '</NAME_DISPLAY>
+                  <LAST_NAME></LAST_NAME>
+                  <FIRST_NAME></FIRST_NAME>
+                  <ENCRYPTED_EMPLID></ENCRYPTED_EMPLID>
                 </CLASS_INSTRUCTOR>
               </CLASS_INSTRUCTORS>
             </CLASS_MEETING_PATTERN>
