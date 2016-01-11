@@ -160,25 +160,52 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
       <CATALOG_NBR>' . $subject->CATALOG_NBR  . '</CATALOG_NBR>
       <INSTITUTION>' . $inst  . '</INSTITUTION>
       <INSTITUTION_LOVDescr>CU Boulder</INSTITUTION_LOVDescr>
-      <ACAD_CAREER>UGRD</ACAD_CAREER>
-      <ACAD_CAREER_LOVDescr>Undergraduate</ACAD_CAREER_LOVDescr>
+      <ACAD_CAREER>' . $subject->ACAD_CAR_CD  . '</ACAD_CAREER>
+      <ACAD_CAREER_LOVDescr></ACAD_CAREER_LOVDescr>
       <COURSE_TITLE_LONG>' . $title  . '</COURSE_TITLE_LONG>
       <CRSE_OFFER_NBR>1</CRSE_OFFER_NBR>
       <CLASSES_SUMMARY>';
 
     // class meeting
-    $classes = db_query('SELECT * FROM {class_meeting} WHERE CRSE_ID = :course_id', array(':course_id' => $course_id));
+    $classes = db_query('SELECT * FROM {class_psquery} WHERE CRSE_ID = :course_id', array(':course_id' => $course_id));
     foreach ($classes as $class) {
       $class_count++;
-      //clean up times from csv imports
+      //clean up times from csv imports tables
       //1/1/1900 9:00:00.000000 AM 
       $time_start = str_replace(":00.000000", "", $class->MEETING_TIME_START);
       $time_start = str_replace("1/1/1900 ", "", $time_start);
-      dsm($time_start);
+      //dsm($time_start);
       
       $time_end = str_replace(":00.000000", "", $class->MEETING_TIME_START);
       $time_end = str_replace("1/1/1900 ", "", $time_end);
-      dsm($time_end);
+      //dsm($time_end);
+      
+      // build meeting schedule long
+      $schedule = '';
+      if ($class->Mon) {
+        $schedule .= 'Mon';
+      }
+      if ($class->Tues) {
+        $schedule .= 'Tues';
+      }
+      if ($class->Wed) {
+        $schedule .= 'Wed';
+      }
+      if ($class->Thurs) {
+        $schedule .= 'Thurs';
+      }
+      if ($class->Fri) {
+        $schedule .= 'Fri';
+      }
+      if ($class->Sat) {
+        $schedule .= 'Sat';
+      }
+      if ($class->Sun) {
+        $schedule .= 'Sun';
+      }
+      
+      $schedule .= ' ' . $class->MEETING_TIME_START . ' - ' . $class->MEETING_TIME_END;
+      
       
       $output .= '      <CLASS_SUMMARY index="' . $class_count. '">
           <CRSE_ID>' . $course_id . '</CRSE_ID>
@@ -190,7 +217,7 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
           <STRM>' . $term . '</STRM>
           <STRM_LOVDescr>' . $subject->TEM_LD . '</STRM_LOVDescr>
           <SESSION_CODE>' . $subject->SESSION_CD . '</SESSION_CODE>
-          <SESSION_CODE_LOVDescr>CE Online TermBased Full Sess</SESSION_CODE_LOVDescr>
+          <SESSION_CODE_LOVDescr></SESSION_CODE_LOVDescr>
           <CLASS_SECTION>' . $class->CLASS_SECTION . '</CLASS_SECTION>
           <CLASS_NBR>' . $subject_nbr . '</CLASS_NBR>
           <SCHEDULE_PRINT>Y</SCHEDULE_PRINT>
@@ -202,16 +229,14 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
           <SSR_CLASSNAME_LONG/>
           <STATUS>O</STATUS>
           <STATUS_LOVDescr>Open</STATUS_LOVDescr>
-          <SSR_COMPONENT>LEC</SSR_COMPONENT>
-          <SSR_COMPONENT_LOVDescr>Lecture</SSR_COMPONENT_LOVDescr>
-          <CAMPUS>CEPS</CAMPUS>
-          <CAMPUS_LOVDescr>Boulder Continuing Education</CAMPUS_LOVDescr>
+          <SSR_COMPONENT>' . $class->CLASS_SECTION . '</SSR_COMPONENT>
+          <SSR_COMPONENT_LOVDescr></SSR_COMPONENT_LOVDescr>
+          <CAMPUS></CAMPUS>
+          <CAMPUS_LOVDescr></CAMPUS_LOVDescr>
           <INSTITUTION>CUBLD</INSTITUTION>
-          <SSR_DESCRLONG>
-            Detailed consideration of human biology, the place of humans in the animal kingdom, primate ecology, and fossil evidence for human evolution. Credit not granted for this course and ANTH 2050. Required for ANTH majors. Approved for GT-SC1. Meets MAPS requirement for natural science: non-lab. Approved for arts and sciences core curriculum: natural science.
-          </SSR_DESCRLONG>
-          <INSTRUCTION_MODE>OL</INSTRUCTION_MODE>
-          <INSTRUCTION_MODE_LOVDescr>Online</INSTRUCTION_MODE_LOVDescr>
+          <SSR_DESCRLONG>' . $class->SSR_DESCRLONG . '</SSR_DESCRLONG>
+          <INSTRUCTION_MODE>' . $class->INSTRUCTION_MODE . '</INSTRUCTION_MODE>
+          <INSTRUCTION_MODE_LOVDescr></INSTRUCTION_MODE_LOVDescr>
           <ENRL_CAP>' . $subject->ENRL_CAP . '</ENRL_CAP>
           <ENRL_TOT>' . $subject->ENRL_TOT . '</ENRL_TOT>
           <WAIT_CAP>' . $subject->WAIT_CAP . '</WAIT_CAP>
@@ -231,29 +256,29 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
           <CRS_TOPIC_DESCR/>
           <CLASSES_MEETING_PATTERNS>
             <CLASS_MEETING_PATTERN>
-              <MEETING_TIME_START>' . $time_start . '</MEETING_TIME_START>
-              <MEETING_TIME_END>' . $time_end . '</MEETING_TIME_END>
-              <MON>N</MON>
-              <TUES>N</TUES>
-              <WED>N</WED>
-              <THURS>N</THURS>
-              <FRI>N</FRI>
-              <SAT>N</SAT>
-              <SUN>N</SUN>
+              <MEETING_TIME_START>' . $class->MEETING_TIME_START . '</MEETING_TIME_START>
+              <MEETING_TIME_END>' . $class->MEETING_TIME_END . '</MEETING_TIME_END>
+              <MON>' . $class->Mon . '</MON>
+              <TUES>' . $class->Tues . '</TUES>
+              <WED>' . $class->Wed . '</WED>
+              <THURS>' . $class->Thurs . '</THURS>
+              <FRI>' . $class->Fri . '</FRI>
+              <SAT>' . $class->Sat . '</SAT>
+              <SUN>' . $class->Sun . '</SUN>
               <START_DT>' . $class->START_DT . '</START_DT>
               <END_DT>' . $class->END_DT . '</END_DT>
               <CRS_TOPIC_ID>0</CRS_TOPIC_ID>
               <CRS_TOPIC_ID_LOVDescr/>
               <SCC_LATITUDE>0</SCC_LATITUDE>
               <SCC_LONGITUDE>0</SCC_LONGITUDE>
-              <SSR_MTG_SCHED_LONG>TBA</SSR_MTG_SCHED_LONG>
-              <SSR_MTG_LOC_LONG>' . $class->FACILITY_ID_LOVDESCR . '</SSR_MTG_LOC_LONG>
+              <SSR_MTG_SCHED_LONG>' . $schedule . '</SSR_MTG_SCHED_LONG>
+              <SSR_MTG_LOC_LONG>' . $class->SSR_MTG_LOC_LONG . '</SSR_MTG_LOC_LONG>
               <SSR_INSTR_LONG>' . $class->SSR_INSTR_LONG . '</SSR_INSTR_LONG>
               <SSR_MTG_DT_LONG>2016-01-19 - 2016-04-29</SSR_MTG_DT_LONG>
               <SSR_TOPIC_LONG>TBA</SSR_TOPIC_LONG>
               <CLASS_INSTRUCTORS>
                 <CLASS_INSTRUCTOR>
-                  <EMPLID>810288959</EMPLID>
+                  <EMPLID></EMPLID>
                   <INSTR_ROLE>PI</INSTR_ROLE>
                   <INSTR_ROLE_LOVDescr>Primary Instructor</INSTR_ROLE_LOVDescr>
                   <NAME_DISPLAY>' . $class->SSR_INSTR_LONG . '</NAME_DISPLAY>
