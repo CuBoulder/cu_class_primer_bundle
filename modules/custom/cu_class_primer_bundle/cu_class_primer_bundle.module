@@ -133,14 +133,14 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
   $class_count = 0;
 
   $output = '<?xml version="1.0" encoding="UTF-8"?>
-<SSR_GET_CLASSES_RESP xmlns:ser="http://xmlns.oracle.com/Enterprise/HCM/services">
-    <SEARCH_RESULT>
-    <ERROR_WARN_TEXT/>
-    <SSR_COURSE_COUNT>1</SSR_COURSE_COUNT>
-    <SSR_ERR_LMT_EXCEED/>
-    <SSR_WRN_LMT_EXCEED/>
-    <SSR_CLASS_COUNT>1</SSR_CLASS_COUNT>
-    <SUBJECTS>';
+<ser:SSR_GET_CLASSES_RESP xmlns:ser="http://xmlns.oracle.com/Enterprise/HCM/services">
+    <ser:SEARCH_RESULT>
+    <ser:ERROR_WARN_TEXT/>
+    <ser:SSR_COURSE_COUNT>1</ser:SSR_COURSE_COUNT>
+    <ser:SSR_ERR_LMT_EXCEED/>
+    <ser:SSR_WRN_LMT_EXCEED/>
+    <ser:SSR_CLASS_COUNT>1</ser:SSR_CLASS_COUNT>
+    <ser:SUBJECTS>';
 
   $results = db_query('SELECT * FROM {class_search} WHERE CRSE_CD = :course_id', array(':course_id' => $course_id));
 
@@ -150,24 +150,33 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
     //mimic XML structure from detail response
 
     $title = check_plain($subject->CRSE_TTL_LD);
-    $subject_nbr = str_replace( ',', '', $subject->CLASS_NUM);
+    //$subject_nbr = str_replace( ',', '', $subject->CLASS_NUM);
 
-    $output .= '<SUBJECT index="' . $subject_count . '">
-      <CRSE_ID>' . $course_id  . '</CRSE_ID>
-      <CRSE_ID_LOVDescr>' . $title  . '</CRSE_ID_LOVDescr>
-      <SUBJECT>' . $subject_cd  . '</SUBJECT>
-      <SUBJECT_LOVDescr>' . $subject->SBJCT_LD  . '</SUBJECT_LOVDescr>
-      <CATALOG_NBR>' . $subject->CATALOG_NBR  . '</CATALOG_NBR>
-      <INSTITUTION>' . $inst  . '</INSTITUTION>
-      <INSTITUTION_LOVDescr>CU Boulder</INSTITUTION_LOVDescr>
-      <ACAD_CAREER>' . $subject->ACAD_CAR_CD  . '</ACAD_CAREER>
-      <ACAD_CAREER_LOVDescr></ACAD_CAREER_LOVDescr>
-      <COURSE_TITLE_LONG>' . $title  . '</COURSE_TITLE_LONG>
-      <CRSE_OFFER_NBR>1</CRSE_OFFER_NBR>
-      <CLASSES_SUMMARY>';
+    $output .= '<ser:SUBJECT index="' . $subject_count . '">
+      <ser:CRSE_ID>' . $course_id  . '</ser:CRSE_ID>
+      <ser:CRSE_ID_LOVDescr>' . $title  . '</ser:CRSE_ID_LOVDescr>
+      <ser:SUBJECT>' . $subject_cd  . '</ser:SUBJECT>
+      <ser:SUBJECT_LOVDescr>' . $subject->SBJCT_LD  . '</ser:SUBJECT_LOVDescr>
+      <ser:CATALOG_NBR>' . $subject->CATALOG_NBR  . '</ser:CATALOG_NBR>
+      <ser:INSTITUTION>' . $inst  . '</ser:INSTITUTION>
+      <ser:INSTITUTION_LOVDescr>CU Boulder</ser:INSTITUTION_LOVDescr>
+      <ser:ACAD_CAREER>' . $subject->ACAD_CAR_CD  . '</ser:ACAD_CAREER>
+      <ser:ACAD_CAREER_LOVDescr></ser:ACAD_CAREER_LOVDescr>
+      <ser:COURSE_TITLE_LONG>' . $title  . '</ser:COURSE_TITLE_LONG>
+      <ser:CRSE_OFFER_NBR>1</ser:CRSE_OFFER_NBR>
+      <ser:CLASSES_SUMMARY>';
 
     // class meeting
-    $classes = db_query('SELECT * FROM {class_psquery} WHERE CRSE_ID = :course_id', array(':course_id' => $course_id));
+    //$classes = db_query('SELECT * FROM {class_psquery} WHERE CRSE_ID = :course_id', array(':course_id' => $course_id));
+    
+    $classes = db_query("SELECT CLASS_NBR, SUBJECT, CLASS_SECTION, SESSION_CD, CATALOG_NBR, 
+    ACAD_CAR_CD, CRSE_LD, COURSE_TITLE_LONG, CLASS_NBR, CLASS_TYPE, SSR_DESCRLONG, 
+    INSTRUCTION_MODE, START_DT, END_DT, MEETING_TIME_START, 
+    MEETING_TIME_END, Mon, Tues, Wed, Thurs, Fri, Sat, Sun, SSR_MTG_LOC_LONG, 
+    SSR_INSTR_LONG,INSTITUTION, ENRL_STAT, ENRL_CAP, ENRL_TOT, WAIT_TOT, CRSE_ID, 
+    CRSE_ATTR_CD, GROUP_CONCAT(CRSE_ATTR_VALUE_CD SEPARATOR ', ') 
+    FROM class_psquery WHERE CRSE_ID = :course_id", array(':course_id' => $course_id));
+    
     foreach ($classes as $class) {
       $class_count++;
       //clean up times from csv imports tables
@@ -182,122 +191,122 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
       
       // build meeting schedule long
       $schedule = '';
-      if ($class->Mon) {
-        $schedule .= 'Mon';
+      if ($class->Mon == 'Y') {
+        $schedule .= 'M';
       }
-      if ($class->Tues) {
-        $schedule .= 'Tues';
+      if ($class->Tues == 'Y') {
+        $schedule .= 'Tu';
       }
-      if ($class->Wed) {
-        $schedule .= 'Wed';
+      if ($class->Wed == 'Y') {
+        $schedule .= 'W';
       }
-      if ($class->Thurs) {
-        $schedule .= 'Thurs';
+      if ($class->Thurs == 'Y') {
+        $schedule .= 'Th';
       }
-      if ($class->Fri) {
-        $schedule .= 'Fri';
+      if ($class->Fri == 'Y') {
+        $schedule .= 'F';
       }
-      if ($class->Sat) {
-        $schedule .= 'Sat';
+      if ($class->Sat == 'Y') {
+        $schedule .= 'Sa';
       }
-      if ($class->Sun) {
-        $schedule .= 'Sun';
+      if ($class->Sun == 'Y') {
+        $schedule .= 'Su';
       }
       
       $schedule .= ' ' . $class->MEETING_TIME_START . ' - ' . $class->MEETING_TIME_END;
       
       
-      $output .= '      <CLASS_SUMMARY index="' . $class_count. '">
-          <CRSE_ID>' . $course_id . '</CRSE_ID>
-          <CRSE_ID_LOVDescr>' . $title . '</CRSE_ID_LOVDescr>
-          <SUBJECT>' . $subject_cd . '</SUBJECT>
-          <SUBJECT_LOVDescr>' . $subject->SBJCT_LD . '</SUBJECT_LOVDescr>
-          <CATALOG_NBR>' . $subject->CATALOG_NBR . '</CATALOG_NBR>
-          <CRSE_OFFER_NBR>1</CRSE_OFFER_NBR>
-          <STRM>' . $term . '</STRM>
-          <STRM_LOVDescr>' . $subject->TEM_LD . '</STRM_LOVDescr>
-          <SESSION_CODE>' . $subject->SESSION_CD . '</SESSION_CODE>
-          <SESSION_CODE_LOVDescr></SESSION_CODE_LOVDescr>
-          <CLASS_SECTION>' . $class->CLASS_SECTION . '</CLASS_SECTION>
-          <CLASS_NBR>' . $subject_nbr . '</CLASS_NBR>
-          <SCHEDULE_PRINT>Y</SCHEDULE_PRINT>
-          <SCHEDULE_PRINT_LOVDescr>Yes</SCHEDULE_PRINT_LOVDescr>
-          <COMBINED_SECTION/>
-          <COMBINED_SECTION_LOVDescr/>
-          <STATUS>O</STATUS>
-          <CLASS_TOPIC>0</CLASS_TOPIC>
-          <SSR_CLASSNAME_LONG/>
-          <STATUS>O</STATUS>
-          <STATUS_LOVDescr>Open</STATUS_LOVDescr>
-          <SSR_COMPONENT>' . $class->CLASS_SECTION . '</SSR_COMPONENT>
-          <SSR_COMPONENT_LOVDescr></SSR_COMPONENT_LOVDescr>
-          <CAMPUS></CAMPUS>
-          <CAMPUS_LOVDescr></CAMPUS_LOVDescr>
-          <INSTITUTION>CUBLD</INSTITUTION>
-          <SSR_DESCRLONG>' . $class->SSR_DESCRLONG . '</SSR_DESCRLONG>
-          <INSTRUCTION_MODE>' . $class->INSTRUCTION_MODE . '</INSTRUCTION_MODE>
-          <INSTRUCTION_MODE_LOVDescr></INSTRUCTION_MODE_LOVDescr>
-          <ENRL_CAP>' . $subject->ENRL_CAP . '</ENRL_CAP>
-          <ENRL_TOT>' . $subject->ENRL_TOT . '</ENRL_TOT>
-          <WAIT_CAP>' . $subject->WAIT_CAP . '</WAIT_CAP>
-          <WAIT_TOT>' . $subject->WAIT_TOT . '</WAIT_TOT>
-          <ENRL_STAT>' . $subject->ENRL_STAT . '</ENRL_STAT>
-          <CLASS_NOTES>
-            <CLASS_NOTE></CLASS_NOTE>
-          </CLASS_NOTES>
-          <UNITS_MAX>' . $subject->UNITS_MAXIMUM . '</UNITS_MAX>
-          <UNITS_MIN>' . $subject->UNITS_MINIMUM . '</UNITS_MIN>
-          <CRSE_ATTR>' . $subject->CRSE_ATTR_CD . '</CRSE_ATTR>
-          <CRSE_ATTR_VALUE>' . $subject->CRSE_ATTR_VALUE_CD . '</CRSE_ATTR_VALUE>
-          <UNITS_ACAD_PROG>' . $subject->UNITS_ACAD_PROG . '</UNITS_ACAD_PROG>
-          <RQRMNT_GROUP></RQRMNT_GROUP>
-          <RQRMNT_GROUP_DESCR></RQRMNT_GROUP_DESCR>
-          <CRS_TOPIC_ID>0</CRS_TOPIC_ID>
-          <CRS_TOPIC_DESCR/>
-          <CLASSES_MEETING_PATTERNS>
-            <CLASS_MEETING_PATTERN>
-              <MEETING_TIME_START>' . $class->MEETING_TIME_START . '</MEETING_TIME_START>
-              <MEETING_TIME_END>' . $class->MEETING_TIME_END . '</MEETING_TIME_END>
-              <MON>' . $class->Mon . '</MON>
-              <TUES>' . $class->Tues . '</TUES>
-              <WED>' . $class->Wed . '</WED>
-              <THURS>' . $class->Thurs . '</THURS>
-              <FRI>' . $class->Fri . '</FRI>
-              <SAT>' . $class->Sat . '</SAT>
-              <SUN>' . $class->Sun . '</SUN>
-              <START_DT>' . $class->START_DT . '</START_DT>
-              <END_DT>' . $class->END_DT . '</END_DT>
-              <CRS_TOPIC_ID>0</CRS_TOPIC_ID>
-              <CRS_TOPIC_ID_LOVDescr/>
-              <SCC_LATITUDE>0</SCC_LATITUDE>
-              <SCC_LONGITUDE>0</SCC_LONGITUDE>
-              <SSR_MTG_SCHED_LONG>' . $schedule . '</SSR_MTG_SCHED_LONG>
-              <SSR_MTG_LOC_LONG>' . $class->SSR_MTG_LOC_LONG . '</SSR_MTG_LOC_LONG>
-              <SSR_INSTR_LONG>' . $class->SSR_INSTR_LONG . '</SSR_INSTR_LONG>
-              <SSR_MTG_DT_LONG>2016-01-19 - 2016-04-29</SSR_MTG_DT_LONG>
-              <SSR_TOPIC_LONG>TBA</SSR_TOPIC_LONG>
-              <CLASS_INSTRUCTORS>
-                <CLASS_INSTRUCTOR>
-                  <EMPLID></EMPLID>
-                  <INSTR_ROLE>PI</INSTR_ROLE>
-                  <INSTR_ROLE_LOVDescr>Primary Instructor</INSTR_ROLE_LOVDescr>
-                  <NAME_DISPLAY>' . $class->SSR_INSTR_LONG . '</NAME_DISPLAY>
-                  <LAST_NAME></LAST_NAME>
-                  <FIRST_NAME></FIRST_NAME>
-                  <ENCRYPTED_EMPLID></ENCRYPTED_EMPLID>
-                </CLASS_INSTRUCTOR>
-              </CLASS_INSTRUCTORS>
-            </CLASS_MEETING_PATTERN>
-          </CLASSES_MEETING_PATTERNS>
-        </CLASS_SUMMARY>';
+      $output .= '      <ser:CLASS_SUMMARY index="' . $class_count. '">
+          <ser:CRSE_ID>' . $course_id . '</ser:CRSE_ID>
+          <ser:CRSE_ID_LOVDescr>' . $title . '</ser:CRSE_ID_LOVDescr>
+          <ser:SUBJECT>' . $subject_cd . '</ser:SUBJECT>
+          <ser:SUBJECT_LOVDescr>' . $subject->SBJCT_LD . '</ser:SUBJECT_LOVDescr>
+          <ser:CATALOG_NBR>' . $subject->CATALOG_NBR . '</ser:CATALOG_NBR>
+          <ser:CRSE_OFFER_NBR>1</ser:CRSE_OFFER_NBR>
+          <ser:STRM>' . $term . '</ser:STRM>
+          <ser:STRM_LOVDescr>' . $subject->TEM_LD . '</ser:STRM_LOVDescr>
+          <ser:SESSION_CODE>' . $subject->SESSION_CD . '</ser:SESSION_CODE>
+          <ser:SESSION_CODE_LOVDescr></ser:SESSION_CODE_LOVDescr>
+          <ser:CLASS_SECTION>' . $class->CLASS_SECTION . '</ser:CLASS_SECTION>
+          <ser:CLASS_NBR>' . $class->CLASS_NBR . '</ser:CLASS_NBR>
+          <ser:SCHEDULE_PRINT>Y</ser:SCHEDULE_PRINT>
+          <ser:SCHEDULE_PRINT_LOVDescr>Yes</ser:SCHEDULE_PRINT_LOVDescr>
+          <ser:COMBINED_SECTION/>
+          <ser:COMBINED_SECTION_LOVDescr/>
+          <ser:STATUS>O</ser:STATUS>
+          <ser:CLASS_TOPIC>0</ser:CLASS_TOPIC>
+          <ser:SSR_CLASSNAME_LONG/>
+          <ser:STATUS>O</ser:STATUS>
+          <ser:STATUS_LOVDescr>Open</ser:STATUS_LOVDescr>
+          <ser:SSR_COMPONENT>' . $class->CLASS_SECTION . '</ser:SSR_COMPONENT>
+          <ser:SSR_COMPONENT_LOVDescr></ser:SSR_COMPONENT_LOVDescr>
+          <ser:CAMPUS></ser:CAMPUS>
+          <ser:CAMPUS_LOVDescr></ser:CAMPUS_LOVDescr>
+          <ser:INSTITUTION>CUBLD</ser:INSTITUTION>
+          <ser:SSR_DESCRLONG>' . $class->SSR_DESCRLONG . '</ser:SSR_DESCRLONG>
+          <ser:INSTRUCTION_MODE>' . $class->INSTRUCTION_MODE . '</ser:INSTRUCTION_MODE>
+          <ser:INSTRUCTION_MODE_LOVDescr></ser:INSTRUCTION_MODE_LOVDescr>
+          <ser:ENRL_CAP>' . $subject->ENRL_CAP . '</ser:ENRL_CAP>
+          <ser:ENRL_TOT>' . $subject->ENRL_TOT . '</ser:ENRL_TOT>
+          <ser:WAIT_CAP>' . $subject->WAIT_CAP . '</ser:WAIT_CAP>
+          <ser:WAIT_TOT>' . $subject->WAIT_TOT . '</ser:WAIT_TOT>
+          <ser:ENRL_STAT>' . $subject->ENRL_STAT . '</ser:ENRL_STAT>
+          <ser:CLASS_NOTES>
+            <ser:CLASS_NOTE></ser:CLASS_NOTE>
+          </ser:CLASS_NOTES>
+          <ser:UNITS_MAX>' . $subject->UNITS_MAXIMUM . '</ser:UNITS_MAX>
+          <ser:UNITS_MIN>' . $subject->UNITS_MINIMUM . '</ser:UNITS_MIN>
+          <ser:CRSE_ATTR>' . $subject->CRSE_ATTR_CD . '</ser:CRSE_ATTR>
+          <ser:CRSE_ATTR_VALUE>' . $subject->CRSE_ATTR_VALUE_CD . '</ser:CRSE_ATTR_VALUE>
+          <ser:UNITS_ACAD_PROG>' . $subject->UNITS_ACAD_PROG . '</ser:UNITS_ACAD_PROG>
+          <ser:RQRMNT_GROUP></ser:RQRMNT_GROUP>
+          <ser:RQRMNT_GROUP_DESCR></ser:RQRMNT_GROUP_DESCR>
+          <ser:CRS_TOPIC_ID>0</ser:CRS_TOPIC_ID>
+          <ser:CRS_TOPIC_DESCR/>
+          <ser:CLASSES_MEETING_PATTERNS>
+            <ser:CLASS_MEETING_PATTERN>
+              <ser:MEETING_TIME_START>' . $class->MEETING_TIME_START . '</ser:MEETING_TIME_START>
+              <ser:MEETING_TIME_END>' . $class->MEETING_TIME_END . '</ser:MEETING_TIME_END>
+              <ser:MON>' . $class->Mon . '</ser:MON>
+              <ser:TUES>' . $class->Tues . '</ser:TUES>
+              <ser:WED>' . $class->Wed . '</ser:WED>
+              <ser:THURS>' . $class->Thurs . '</ser:THURS>
+              <ser:FRI>' . $class->Fri . '</ser:FRI>
+              <ser:SAT>' . $class->Sat . '</ser:SAT>
+              <ser:SUN>' . $class->Sun . '</ser:SUN>
+              <ser:START_DT>' . $class->START_DT . '</ser:START_DT>
+              <ser:END_DT>' . $class->END_DT . '</ser:END_DT>
+              <ser:CRS_TOPIC_ID>0</ser:CRS_TOPIC_ID>
+              <ser:CRS_TOPIC_ID_LOVDescr/>
+              <ser:SCC_LATITUDE>0</ser:SCC_LATITUDE>
+              <ser:SCC_LONGITUDE>0</ser:SCC_LONGITUDE>
+              <ser:SSR_MTG_SCHED_LONG>' . $schedule . '</ser:SSR_MTG_SCHED_LONG>
+              <ser:SSR_MTG_LOC_LONG>' . $class->SSR_MTG_LOC_LONG . '</ser:SSR_MTG_LOC_LONG>
+              <ser:SSR_INSTR_LONG>' . $class->SSR_INSTR_LONG . '</ser:SSR_INSTR_LONG>
+              <ser:SSR_MTG_DT_LONG>2016-01-19 - 2016-04-29</ser:SSR_MTG_DT_LONG>
+              <ser:SSR_TOPIC_LONG>TBA</ser:SSR_TOPIC_LONG>
+              <ser:CLASS_INSTRUCTORS>
+                <ser:CLASS_INSTRUCTOR>
+                  <ser:EMPLID></ser:EMPLID>
+                  <ser:INSTR_ROLE>PI</ser:INSTR_ROLE>
+                  <ser:INSTR_ROLE_LOVDescr>Primary Instructor</ser:INSTR_ROLE_LOVDescr>
+                  <ser:NAME_DISPLAY>' . $class->SSR_INSTR_LONG . '</ser:NAME_DISPLAY>
+                  <ser:LAST_NAME></ser:LAST_NAME>
+                  <ser:FIRST_NAME></ser:FIRST_NAME>
+                  <ser:ENCRYPTED_EMPLID></ser:ENCRYPTED_EMPLID>
+                </ser:CLASS_INSTRUCTOR>
+              </ser:CLASS_INSTRUCTORS>
+            </ser:CLASS_MEETING_PATTERN>
+          </ser:CLASSES_MEETING_PATTERNS>
+        </ser:CLASS_SUMMARY>';
     }
-    $output .= '    </CLASSES_SUMMARY>
-    </SUBJECT>';
+    $output .= '    </ser:CLASSES_SUMMARY>
+    </ser:SUBJECT>';
   }
 
-  $output .= '</SUBJECTS>
-</SEARCH_RESULT>
-</SSR_GET_CLASSES_RESP>
+  $output .= '</ser:SUBJECTS>
+</ser:SEARCH_RESULT>
+</ser:SSR_GET_CLASSES_RESP>
 ';
 
   print $output;
