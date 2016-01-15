@@ -67,17 +67,18 @@ function cu_class_primer_master($arg2, $arg3, $arg4) {
   <SSR_GET_CLASSES_RESP xmlns="http://xmlns.oracle.com/Enterprise/HCM/services">
     <SEARCH_RESULT>
       <SUBJECTS>';
-  $results = db_query('SELECT * FROM {class_search} WHERE SBJCT_CD = :subject', array(':subject' => $subject));
+  //$results = db_query('SELECT * FROM {class_search} WHERE SBJCT_CD = :subject', array(':subject' => $subject));
+  $results = db_query('SELECT DISTINCT(CRSE_ID), SUBJECT, CATALOG_NBR, ACAD_CAR_CD, COURSE_TITLE_LONG FROM {class_psquery} WHERE SUBJECT = :subject', array(':subject' => $subject));
 
 
   foreach ($results as $course) {
     //mimic XML structure from master response
     //dsm($course);
-    $title = check_plain($course->CRSE_TTL_LD);
+    $title = check_plain($course->COURSE_TITLE_LONG);
     $output .= "
     <SUBJECT>
-      <CRSE_ID>$course->CRSE_CD</CRSE_ID>
-      <SUBJECT>$course->SBJCT_CD</SUBJECT>
+      <CRSE_ID>$course->CRSE_ID</CRSE_ID>
+      <SUBJECT>$course->SUBJECT</SUBJECT>
       <CATALOG_NBR>$course->CATALOG_NBR</CATALOG_NBR>
       <ACAD_CAREER>$course->ACAD_CAR_CD</ACAD_CAREER>
       <COURSE_TITLE_LONG>$title</COURSE_TITLE_LONG>
@@ -142,21 +143,21 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
     <ser:SSR_CLASS_COUNT>1</ser:SSR_CLASS_COUNT>
     <ser:SUBJECTS>';
 
-  $results = db_query('SELECT * FROM {class_search} WHERE CRSE_CD = :course_id', array(':course_id' => $course_id));
-
+  //$results = db_query('SELECT * FROM {class_search} WHERE CRSE_CD = :course_id', array(':course_id' => $course_id));
+  $results = db_query('SELECT DISTINCT(CRSE_ID), COURSE_TITLE_LONG, SUBJECT, CATALOG_NBR, ACAD_CAR_CD FROM {class_psquery} WHERE CRSE_ID = :course_id', array(':course_id' => $course_id));
   foreach ($results as $subject) {
     //dsm($subject);
     $subject_count++;
     //mimic XML structure from detail response
 
-    $title = check_plain($subject->CRSE_TTL_LD);
+    $title = check_plain($subject->COURSE_TITLE_LONG);
     //$subject_nbr = str_replace( ',', '', $subject->CLASS_NUM);
 
     $output .= '<ser:SUBJECT index="' . $subject_count . '">
       <ser:CRSE_ID>' . $course_id  . '</ser:CRSE_ID>
       <ser:CRSE_ID_LOVDescr>' . $title  . '</ser:CRSE_ID_LOVDescr>
       <ser:SUBJECT>' . $subject_cd  . '</ser:SUBJECT>
-      <ser:SUBJECT_LOVDescr>' . $subject->SBJCT_LD  . '</ser:SUBJECT_LOVDescr>
+      <ser:SUBJECT_LOVDescr>' . $subject->SUBJECT  . '</ser:SUBJECT_LOVDescr>
       <ser:CATALOG_NBR>' . $subject->CATALOG_NBR  . '</ser:CATALOG_NBR>
       <ser:INSTITUTION>' . $inst  . '</ser:INSTITUTION>
       <ser:INSTITUTION_LOVDescr>CU Boulder</ser:INSTITUTION_LOVDescr>
@@ -168,27 +169,27 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
 
     // class meeting
     //$classes = db_query('SELECT * FROM {class_psquery} WHERE CRSE_ID = :course_id', array(':course_id' => $course_id));
-    
-    $classes = db_query("SELECT CLASS_NBR, SUBJECT, CLASS_SECTION, SESSION_CD, CATALOG_NBR, 
-    ACAD_CAR_CD, CRSE_LD, COURSE_TITLE_LONG, CLASS_NBR, CLASS_TYPE, SSR_DESCRLONG, 
-    INSTRUCTION_MODE, START_DT, END_DT, MEETING_TIME_START, 
-    MEETING_TIME_END, Mon, Tues, Wed, Thurs, Fri, Sat, Sun, SSR_MTG_LOC_LONG, 
-    SSR_INSTR_LONG,INSTITUTION, ENRL_STAT, ENRL_CAP, ENRL_TOT, WAIT_TOT, CRSE_ID, 
-    CRSE_ATTR_CD, GROUP_CONCAT(CRSE_ATTR_VALUE_CD SEPARATOR ', ') 
+
+    $classes = db_query("SELECT CLASS_NBR, SUBJECT, CLASS_SECTION, SESSION_CD, CATALOG_NBR,
+    ACAD_CAR_CD, CRSE_LD, COURSE_TITLE_LONG, CLASS_NBR, CLASS_TYPE, SSR_DESCRLONG,
+    INSTRUCTION_MODE, START_DT, END_DT, MEETING_TIME_START,
+    MEETING_TIME_END, Mon, Tues, Wed, Thurs, Fri, Sat, Sun, SSR_MTG_LOC_LONG,
+    SSR_INSTR_LONG,INSTITUTION, ENRL_STAT, ENRL_CAP, ENRL_TOT, WAIT_TOT, CRSE_ID,
+    CRSE_ATTR_CD, GROUP_CONCAT(CRSE_ATTR_VALUE_CD SEPARATOR ', ') AS CRSE_ATTR_VALUE_CD
     FROM class_psquery WHERE CRSE_ID = :course_id", array(':course_id' => $course_id));
-    
+
     foreach ($classes as $class) {
       $class_count++;
       //clean up times from csv imports tables
-      //1/1/1900 9:00:00.000000 AM 
+      //1/1/1900 9:00:00.000000 AM
       $time_start = str_replace(":00.000000", "", $class->MEETING_TIME_START);
       $time_start = str_replace("1/1/1900 ", "", $time_start);
       //dsm($time_start);
-      
+
       $time_end = str_replace(":00.000000", "", $class->MEETING_TIME_START);
       $time_end = str_replace("1/1/1900 ", "", $time_end);
       //dsm($time_end);
-      
+
       // build meeting schedule long
       $schedule = '';
       if ($class->Mon == 'Y') {
@@ -212,20 +213,20 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
       if ($class->Sun == 'Y') {
         $schedule .= 'Su';
       }
-      
+
       $schedule .= ' ' . $class->MEETING_TIME_START . ' - ' . $class->MEETING_TIME_END;
-      
-      
+
+
       $output .= '      <ser:CLASS_SUMMARY index="' . $class_count. '">
           <ser:CRSE_ID>' . $course_id . '</ser:CRSE_ID>
           <ser:CRSE_ID_LOVDescr>' . $title . '</ser:CRSE_ID_LOVDescr>
           <ser:SUBJECT>' . $subject_cd . '</ser:SUBJECT>
-          <ser:SUBJECT_LOVDescr>' . $subject->SBJCT_LD . '</ser:SUBJECT_LOVDescr>
-          <ser:CATALOG_NBR>' . $subject->CATALOG_NBR . '</ser:CATALOG_NBR>
+          <ser:SUBJECT_LOVDescr>' . $class->SUBJECT . '</ser:SUBJECT_LOVDescr>
+          <ser:CATALOG_NBR>' . $class->CATALOG_NBR . '</ser:CATALOG_NBR>
           <ser:CRSE_OFFER_NBR>1</ser:CRSE_OFFER_NBR>
           <ser:STRM>' . $term . '</ser:STRM>
           <ser:STRM_LOVDescr>' . $subject->TEM_LD . '</ser:STRM_LOVDescr>
-          <ser:SESSION_CODE>' . $subject->SESSION_CD . '</ser:SESSION_CODE>
+          <ser:SESSION_CODE>' . $class->SESSION_CD . '</ser:SESSION_CODE>
           <ser:SESSION_CODE_LOVDescr></ser:SESSION_CODE_LOVDescr>
           <ser:CLASS_SECTION>' . $class->CLASS_SECTION . '</ser:CLASS_SECTION>
           <ser:CLASS_NBR>' . $class->CLASS_NBR . '</ser:CLASS_NBR>
@@ -246,19 +247,19 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
           <ser:SSR_DESCRLONG>' . $class->SSR_DESCRLONG . '</ser:SSR_DESCRLONG>
           <ser:INSTRUCTION_MODE>' . $class->INSTRUCTION_MODE . '</ser:INSTRUCTION_MODE>
           <ser:INSTRUCTION_MODE_LOVDescr></ser:INSTRUCTION_MODE_LOVDescr>
-          <ser:ENRL_CAP>' . $subject->ENRL_CAP . '</ser:ENRL_CAP>
-          <ser:ENRL_TOT>' . $subject->ENRL_TOT . '</ser:ENRL_TOT>
-          <ser:WAIT_CAP>' . $subject->WAIT_CAP . '</ser:WAIT_CAP>
-          <ser:WAIT_TOT>' . $subject->WAIT_TOT . '</ser:WAIT_TOT>
-          <ser:ENRL_STAT>' . $subject->ENRL_STAT . '</ser:ENRL_STAT>
+          <ser:ENRL_CAP>' . $class->ENRL_CAP . '</ser:ENRL_CAP>
+          <ser:ENRL_TOT>' . $class->ENRL_TOT . '</ser:ENRL_TOT>
+          <ser:WAIT_CAP>' . $class->ENRL_CAP . '</ser:WAIT_CAP>
+          <ser:WAIT_TOT>' . $class->WAIT_TOT . '</ser:WAIT_TOT>
+          <ser:ENRL_STAT>' . $class->ENRL_STAT . '</ser:ENRL_STAT>
           <ser:CLASS_NOTES>
             <ser:CLASS_NOTE></ser:CLASS_NOTE>
           </ser:CLASS_NOTES>
-          <ser:UNITS_MAX>' . $subject->UNITS_MAXIMUM . '</ser:UNITS_MAX>
-          <ser:UNITS_MIN>' . $subject->UNITS_MINIMUM . '</ser:UNITS_MIN>
-          <ser:CRSE_ATTR>' . $subject->CRSE_ATTR_CD . '</ser:CRSE_ATTR>
-          <ser:CRSE_ATTR_VALUE>' . $subject->CRSE_ATTR_VALUE_CD . '</ser:CRSE_ATTR_VALUE>
-          <ser:UNITS_ACAD_PROG>' . $subject->UNITS_ACAD_PROG . '</ser:UNITS_ACAD_PROG>
+          <ser:UNITS_MAX>' . $class->MinUnits . '</ser:UNITS_MAX>
+          <ser:UNITS_MIN>' . $class->MaxUnits . '</ser:UNITS_MIN>
+          <ser:CRSE_ATTR>' . $class->CRSE_ATTR_CD . '</ser:CRSE_ATTR>
+          <ser:CRSE_ATTR_VALUE>' . $class->CRSE_ATTR_VALUE_CD . '</ser:CRSE_ATTR_VALUE>
+          <ser:UNITS_ACAD_PROG>' . $class->MaxUnits . '</ser:UNITS_ACAD_PROG>
           <ser:RQRMNT_GROUP></ser:RQRMNT_GROUP>
           <ser:RQRMNT_GROUP_DESCR></ser:RQRMNT_GROUP_DESCR>
           <ser:CRS_TOPIC_ID>0</ser:CRS_TOPIC_ID>
@@ -309,5 +310,9 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
 </ser:SSR_GET_CLASSES_RESP>
 ';
 
+  //if for some reason we don't find any classes for this course, return nothing
+  if ($class_count == 0) {
+    print '';
+  }
   print $output;
 }
