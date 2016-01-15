@@ -175,7 +175,7 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
     INSTRUCTION_MODE, START_DT, END_DT, MEETING_TIME_START,
     MEETING_TIME_END, Mon, Tues, Wed, Thurs, Fri, Sat, Sun, SSR_MTG_LOC_LONG,
     SSR_INSTR_LONG,INSTITUTION, ENRL_STAT, ENRL_CAP, ENRL_TOT, WAIT_TOT, CRSE_ID,
-    CRSE_ATTR_CD, GROUP_CONCAT(CRSE_ATTR_VALUE_CD SEPARATOR ', ') AS CRSE_ATTR_VALUE_CD
+    CRSE_ATTR_CD, MinUnits, MaxUnits, GROUP_CONCAT(CRSE_ATTR_VALUE_CD SEPARATOR ', ') AS CRSE_ATTR_VALUE_CD
     FROM class_psquery WHERE CRSE_ID = :course_id", array(':course_id' => $course_id));
 
     foreach ($classes as $class) {
