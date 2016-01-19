@@ -170,12 +170,14 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
     // class meeting
     //$classes = db_query('SELECT * FROM {class_psquery} WHERE CRSE_ID = :course_id', array(':course_id' => $course_id));
 
+    //GROUP_CONCAT(CRSE_ATTR_VALUE_CD SEPARATOR ', ') AS CRSE_ATTR_VALUE_CD
+
     $classes = db_query("SELECT CLASS_NBR, SUBJECT, CLASS_SECTION, SESSION_CD, CATALOG_NBR,
     ACAD_CAR_CD, CRSE_LD, COURSE_TITLE_LONG, CLASS_NBR, CLASS_TYPE, SSR_DESCRLONG,
     INSTRUCTION_MODE, START_DT, END_DT, MEETING_TIME_START,
     MEETING_TIME_END, Mon, Tues, Wed, Thurs, Fri, Sat, Sun, SSR_MTG_LOC_LONG,
     SSR_INSTR_LONG,INSTITUTION, ENRL_STAT, ENRL_CAP, ENRL_TOT, WAIT_TOT, CRSE_ID,
-    CRSE_ATTR_CD, MinUnits, MaxUnits, GROUP_CONCAT(CRSE_ATTR_VALUE_CD SEPARATOR ', ') AS CRSE_ATTR_VALUE_CD
+    CRSE_ATTR_CD, MinUnits, MaxUnits, CRSE_ATTR_VALUE_CD
     FROM class_psquery WHERE CRSE_ID = :course_id", array(':course_id' => $course_id));
 
     foreach ($classes as $class) {
