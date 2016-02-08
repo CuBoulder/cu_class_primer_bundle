@@ -12,7 +12,7 @@ Current class schedule (this will likely change, but isn't currently available f
 - **January 15** – Summer Session Term Available via the API.  This date is tied to the when the data is available to the mobile app.  
 - **February 17, 2016** – Shopping Cart and enrollment becomes available for summer.
 
-##STEP 1: Prime a site
+##STEP 1: Create a Primer site
 
 ~~Assuming the export process from UIS remains consistant, you should recieve 4 tab separated files for the classes in the term you are working with~~.  EXPORTS FROM UIS ARE STILL INCONSISTANT AS OF 2/8/2015.  Currently we are using a PSQuery export manually created by Continuing Education.
 
