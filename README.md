@@ -4,13 +4,13 @@ This project is used to provide XMl in the same format as the UIS Class API with
 
 Current class schedule (this will likely change, but isn't currently available from UIS anywhere else.
 
-**September 7th** - Department course schedulers  gain access to make the updates to the  summer classes.   These tweaks include, cancelling any classes that will not be offered; updating the dates/times; adding instructors; adding non-centrally controlled classrooms, adding notes; creating new classes that were not included in the course roll.
-**October 23 at 11:59pm** -  Department course secheduler lost access to update the classes. 
-**October 26 through November 5th** -  SCHEDULE 25 rooming process occurs. NOTE: During this period, no changes for Summer 2016 can be made in CS. This process is done by the Registrar’s academic scheduling office.
-**November 6** – Departments are notified via Email distribution of printout with all classroom space assignments as well as those classes where a classroom has not been assigned. Departments re-gain access to make updates/changes to certain information on the classes – such as adding instructors, rooms, notes and enroll limits.  After this date, any new classes would need to be scheduled via the RO office.  Dept would send in a form to have the class added to the schedule etc
-**November 17th** - Class search for the portal side is available
-**January 15** – Summer Session Term Available via the API.  This date is tied to the when the data is available to the mobile app.  
-**February 17, 2016** – Shopping Cart and enrollment becomes available for summer.
+- **September 7th** - Department course schedulers  gain access to make the updates to the  summer classes.   These tweaks include, cancelling any classes that will not be offered; updating the dates/times; adding instructors; adding non-centrally controlled classrooms, adding notes; creating new classes that were not included in the course roll.
+- **October 23 at 11:59pm** -  Department course secheduler lost access to update the classes. 
+- **October 26 through November 5th** -  SCHEDULE 25 rooming process occurs. NOTE: During this period, no changes for Summer 2016 can be made in CS. This process is done by the Registrar’s academic scheduling office.
+- **November 6** – Departments are notified via Email distribution of printout with all classroom space assignments as well as those classes where a classroom has not been assigned. Departments re-gain access to make updates/changes to certain information on the classes – such as adding instructors, rooms, notes and enroll limits.  After this date, any new classes would need to be scheduled via the RO office.  Dept would send in a form to have the class added to the schedule etc
+- **November 17th** - Class search for the portal side is available
+- **January 15** – Summer Session Term Available via the API.  This date is tied to the when the data is available to the mobile app.  
+- **February 17, 2016** – Shopping Cart and enrollment becomes available for summer.
 
 ##STEP 1: Prime a site
 
