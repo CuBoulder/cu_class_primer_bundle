@@ -175,7 +175,7 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
     $classes = db_query("SELECT CLASS_NBR, SUBJECT, CLASS_SECTION, SESSION_CD, CATALOG_NBR,
     ACAD_CAR_CD, CRSE_LD, COURSE_TITLE_LONG, CLASS_NBR, CLASS_TYPE, SSR_DESCRLONG,
     INSTRUCTION_MODE, START_DT, END_DT, MEETING_TIME_START,
-    MEETING_TIME_END, Mon, Tues, Wed, Thurs, Fri, Sat, Sun, SSR_MTG_LOC_LONG,
+    MEETING_TIME_END, Mon, Tues, Wed, Thurs, Fri, Sat, Sun, SSR_MTG_LOC_LONG, Instructor_First_Name,
     SSR_INSTR_LONG,INSTITUTION, ENRL_STAT, ENRL_CAP, ENRL_TOT, WAIT_TOT, CRSE_ID,
     CRSE_ATTR_CD, MinUnits, MaxUnits, GROUP_CONCAT(CRSE_ATTR_VALUE_CD SEPARATOR ', ') AS CRSE_ATTR_VALUE_CD
     FROM class_psquery WHERE CRSE_ID = :course_id AND 'class status' != 'X' AND SESSION_CD != 'BD2' GROUP BY CLASS_NBR", array(':course_id' => $course_id));
@@ -220,6 +220,7 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
 
       $schedule .= ' ' . $class->MEETING_TIME_START . ' - ' . $class->MEETING_TIME_END;
 
+      $fullname = $class->Instructor_First_Name . ' ' . $class->SSR_INSTR_LONG;
 
       $output .= '      <ser:CLASS_SUMMARY index="' . $class_count. '">
           <ser:CRSE_ID>' . $course_id . '</ser:CRSE_ID>
@@ -287,7 +288,7 @@ function cu_class_primer_detail($arg2, $arg3, $arg4, $arg5) {
               <ser:SCC_LONGITUDE>0</ser:SCC_LONGITUDE>
               <ser:SSR_MTG_SCHED_LONG>' . $schedule . '</ser:SSR_MTG_SCHED_LONG>
               <ser:SSR_MTG_LOC_LONG>' . $class->SSR_MTG_LOC_LONG . '</ser:SSR_MTG_LOC_LONG>
-              <ser:SSR_INSTR_LONG>' . $class->SSR_INSTR_LONG . '</ser:SSR_INSTR_LONG>
+              <ser:SSR_INSTR_LONG>' . $fullname . '</ser:SSR_INSTR_LONG>
               <ser:SSR_MTG_DT_LONG>2016-01-19 - 2016-04-29</ser:SSR_MTG_DT_LONG>
               <ser:SSR_TOPIC_LONG>TBA</ser:SSR_TOPIC_LONG>
               <ser:CLASS_INSTRUCTORS>
