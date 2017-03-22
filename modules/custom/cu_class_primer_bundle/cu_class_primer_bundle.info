@@ -2,3 +2,6 @@ name = Class Primer
 description = Populate classes from csv files.
 core = 7.x
 package = CU-Classes
+version = 1.0
+project = cu_class_primer_bundle
+project status url = https://github.com/CuBoulder/cu_class_primer_bundle
