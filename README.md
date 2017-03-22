@@ -1,3 +1,5 @@
+**NOTE: To update this repository's codebase, please follow: [Releasing Custom Bundle Code](https://github.com/CuBoulder/express_documentation/blob/master/docs/custom_bundle_releases.md#how-to-succesfully-update-a-custom-bundles-code).**
+
 # CU Class Primer Bundle
 
 This project is used to provide XMl in the same format as the UIS Class API with data from an export. This is essential when importing classes to start developing a site before a term is published using the API (ie. Summer Session) or when the data you'd like to filter classes is only found in the detail mode of the API (ie. CU Connect). To find the ~2,000 classes that are offered online accross all CU instituions, we'd have to query all courses for all instituions for all upcoming semesters.  That would require parsing > 76,000 classes every 24 hours to know if any new classes have been offered.  Instead, a query that only includes the online classes can be periodically exported by UIS to use with the primer.
